@@ -3,10 +3,11 @@ import api from '../../api/axiosConfig';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import ReviewForm from '../reviewForm/ReviewForm';
-
 import React from 'react'
+import { Button } from 'react-bootstrap';
 
-const Reviews = ({ getMovieData, movie, reviews, setReviews, uniqueKey }) => {
+
+const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
 
     const revText = useRef();
     let params = useParams();
@@ -16,24 +17,38 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews, uniqueKey }) => {
         getMovieData(movieId);
     }, [])
 
-    const addReview = async (e) => {
-        e.preventDefault();
-
+    const addReview = async (event) => {
+        event.preventDefault();
         const rev = revText.current;
 
-        try {
-            const response = await api.post("/api/v1/reviews", { reviewBody: rev.value, imdbId: movieId });
-            const newReview = { body: rev.value, key: uniqueKey, timestamp: Date.now() };
-            const updatedReviews = [...reviews, newReview];
-            rev.value = "";
-            setReviews(updatedReviews);
-        }
-        catch (err) {
-            console.error(err);
+        if (rev.value !== "") {
+            try {
+                const response = await api.post("/api/v1/reviews", { reviewBody: rev.value, imdbId: movieId });
+                // console.log(response.data.id)
+                const newReviewId = response.data.id;
+                const newReview = { body: rev.value, id: newReviewId, timestamp: Date.now() };
+                const updatedReviews = [...reviews, newReview];
+                rev.value = "";
+                setReviews(updatedReviews);
+            }
+            catch (err) {
+                console.error(err);
+            }
         }
     }
 
-    const sortedReviews = reviews.slice().sort((a, b) => b.timestamp - a.timestamp);
+    const deleteReview = async (id) => {
+        try {
+            // console.log({ id })
+            await api.delete(`/api/v1/reviews/${id}`);
+            const updatedReviews = reviews.filter((r) => r.id !== id);
+            setReviews(updatedReviews);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const sortedReviews = [...reviews].sort((a, b) => b.timestamp - a.timestamp);
 
     return (
         <Container>
@@ -60,18 +75,22 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews, uniqueKey }) => {
                         </>
                     }
                     {
-                        sortedReviews?.map((r) => {
+                        sortedReviews?.map((review) => {
+                            // console.log(r.id);
                             return (
-                                <>
-                                    <Row key={r.timestamp}>
-                                        <Col>{r.body}</Col>
+                                <div key={review.id}>
+                                    <Row >
+                                        <Col>{review.body}</Col>
+                                        <Col>
+                                            <Button variant="outline-info" onClick={() => deleteReview(review.id)}>Delete</Button>
+                                        </Col>
                                     </Row>
                                     <Row>
                                         <Col>
                                             <hr />
                                         </Col>
                                     </Row>
-                                </>
+                                </div>
                             )
                         })
                     }
