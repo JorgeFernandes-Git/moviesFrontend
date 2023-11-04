@@ -13,6 +13,8 @@ const LoginForm = () => {
         password: '',
     });
 
+    const [error, setError] = useState(null); // Add an error state
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -29,9 +31,11 @@ const LoginForm = () => {
                 login(userData); // Set the user state upon successful login
                 navigate('/Home'); // Redirect to the Home page or another appropriate destination
             } else {
+                setError('Authentication failed. Please check your credentials.');
                 console.error('Login failed');
             }
         } catch (error) {
+            setError('Authentication failed. Please check your credentials.');
             console.error('An error occurred:', error);
         }
     };
@@ -63,6 +67,8 @@ const LoginForm = () => {
                             Log In
                         </Button>
                     </Form>
+                    <p></p>
+                    {error && <p style={{ color: 'red' }}>{error}</p>}
                 </Col>
             </Row>
         </Container>
