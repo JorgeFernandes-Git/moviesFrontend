@@ -9,6 +9,7 @@ import Trailer from './components/trailer/Trailer';
 import Reviews from './components/reviews/Reviews';
 import NotFound from './components/notFound/NotFound';
 import UserForm from './components/userForm/UserForm';
+import LoginForm from './components/loginForm/LoginForm';
 
 function App() {
   const [movies, setMovies] = useState();
@@ -54,6 +55,7 @@ function App() {
           <Route path="/Trailer/:ytTrailerId" element={<Trailer />} />
           <Route path="/Reviews/:movieId" element={<Reviews getMovieData={getMovieData} movie={movie} reviews={reviews} setReviews={setReviews} />} />
           <Route path="/Register" element={<UserForm onSubmit={handleFormSubmit} />} />
+          <Route path="/Login" element={<LoginForm />} />
           <Route path="*" element={<NotFound />}></Route>
         </Route>
       </Routes>

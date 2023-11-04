@@ -1,14 +1,11 @@
 import { Button, Container, Nav, Navbar, NavLink } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../userContext/UserContext';
-import { useState, useEffect } from 'react';
 
 const Header = () => {
 
     const navigate = useNavigate();
     const { user, logout } = useUser();
-    const [logoutMessage, setLogoutMessage] = useState('');
-    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     function register() {
         navigate(`/Register`);
@@ -21,22 +18,9 @@ const Header = () => {
     function handleLogout() {
         // Call the logout function to log the user out
         logout();
-        setIsLoggingOut(true);
-        setLogoutMessage('Logging out...');
         // Redirect to the Home page or another appropriate destination
-        // Simulate a delay for 3 seconds before redirecting
-        setTimeout(() => {
-            setIsLoggingOut(false);
-            setLogoutMessage('');
-            navigate(`/Home`);
-        }, 3000);
+        navigate(`/Home`);
     }
-
-    useEffect(() => {
-        if (isLoggingOut) {
-            setLogoutMessage('Logging out...');
-        }
-    }, [isLoggingOut]);
 
     return (
         <Navbar bg="dark" variant="dark" expand="lg">
@@ -75,7 +59,7 @@ const Header = () => {
                 </Navbar.Collapse>
             </Container>
         </Navbar >
-    );
-};
+    )
+}
 
 export default Header
