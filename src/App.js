@@ -8,6 +8,7 @@ import Header from './components/header/Header';
 import Trailer from './components/trailer/Trailer';
 import Reviews from './components/reviews/Reviews';
 import NotFound from './components/notFound/NotFound';
+import UserForm from './components/userForm/UserForm';
 
 function App() {
   const [movies, setMovies] = useState();
@@ -35,6 +36,11 @@ function App() {
     }
   }
 
+  const handleFormSubmit = (formData) => {
+    // Handle the form submission here, e.g., send the formData to your backend or perform some action
+    console.log('User data submitted:', formData);
+  }
+
   useEffect(() => {
     getMovies();
   }, [])
@@ -47,6 +53,7 @@ function App() {
           <Route path="/Home" element={<Home movies={movies} />} />
           <Route path="/Trailer/:ytTrailerId" element={<Trailer />} />
           <Route path="/Reviews/:movieId" element={<Reviews getMovieData={getMovieData} movie={movie} reviews={reviews} setReviews={setReviews} />} />
+          <Route path="/Register" element={<UserForm onSubmit={handleFormSubmit} />} />
           <Route path="*" element={<NotFound />}></Route>
         </Route>
       </Routes>
