@@ -1,4 +1,4 @@
-import { Button, Container, Nav, Navbar, NavLink } from "react-bootstrap";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../userContext/UserContext';
 
@@ -35,7 +35,8 @@ const Header = () => {
                         style={{ maxHeight: "100px" }}
                         navbarScroll
                     >
-                        <NavLink className="nav-link" to="/watchList">Watch List</NavLink>
+                        <Nav.Link to="watchList">Watch List</Nav.Link>
+                        <Nav.Link href="AddMovie">Add Movie</Nav.Link>
                     </Nav>
                     {user ? ( // Check if the user is authenticated
                         <>
